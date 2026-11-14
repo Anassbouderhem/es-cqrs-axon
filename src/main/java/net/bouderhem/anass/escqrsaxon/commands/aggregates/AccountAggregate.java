@@ -4,11 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import net.bouderhem.anass.escqrsaxon.commands.commands.AddAccountCommand;
 import net.bouderhem.anass.escqrsaxon.commands.commands.CreditAccountCommand;
 import net.bouderhem.anass.escqrsaxon.commands.commands.DebitAccountCommand;
+import net.bouderhem.anass.escqrsaxon.commands.commands.UpdateAccountStatusCommand;
 import net.bouderhem.anass.escqrsaxon.enums.AccountStatus;
-import net.bouderhem.anass.escqrsaxon.events.AccountActivatedEvent;
-import net.bouderhem.anass.escqrsaxon.events.AccountCreatedEvent;
-import net.bouderhem.anass.escqrsaxon.events.AccountCreditedEvent;
-import net.bouderhem.anass.escqrsaxon.events.AccountDebitedEvent;
+import net.bouderhem.anass.escqrsaxon.events.*;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
@@ -84,6 +82,17 @@ public class AccountAggregate {
         ));
     }
 
+    @CommandHandler
+    public void handle(UpdateAccountStatusCommand command){
+        // la fonction de décision
+        log.info("************ UpdateAccountStatusCommand Received ***********");
+        if(command.getStatus()==status) throw new RuntimeException("This account "+command.getId()+"Is already"+command.getStatus());
+        AggregateLifecycle.apply(new AccountStatusUpdatedEvent(
+                command.getId(),
+                command.getStatus()
+        ));
+    }
+
     @EventSourcingHandler
     public void on(AccountCreditedEvent event){
         log.info("************ AccountCreditedEvent accured ***********");
@@ -96,5 +105,11 @@ public class AccountAggregate {
         log.info("************ AccountDebitedEvent accured ***********");
         this.accountId = event.getAccountId();
         this.balance = this.balance - event.getAmount();
+    }
+    @EventSourcingHandler
+    public void on(AccountStatusUpdatedEvent event){
+        log.info("************ AccountStatusUpdatedEvent accured ***********");
+        this.accountId = event.getAccountId();
+        this.status = event.getStatus();
     }
 }

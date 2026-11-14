@@ -3,9 +3,11 @@ package net.bouderhem.anass.escqrsaxon.commands.controllers;
 import net.bouderhem.anass.escqrsaxon.commands.commands.AddAccountCommand;
 import net.bouderhem.anass.escqrsaxon.commands.commands.CreditAccountCommand;
 import net.bouderhem.anass.escqrsaxon.commands.commands.DebitAccountCommand;
+import net.bouderhem.anass.escqrsaxon.commands.commands.UpdateAccountStatusCommand;
 import net.bouderhem.anass.escqrsaxon.commands.dtos.AddNewAccountRequestDTO;
 import net.bouderhem.anass.escqrsaxon.commands.dtos.CreditAccountRequestDTO;
 import net.bouderhem.anass.escqrsaxon.commands.dtos.DebitAccountRequestDTO;
+import net.bouderhem.anass.escqrsaxon.commands.dtos.UpdateAccountStatusRequestDTO;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.eventsourcing.eventstore.EventStore;
 import org.springframework.web.bind.annotation.*;
@@ -50,6 +52,15 @@ public class AccountCommandController {
                 request.accountId(),
                 request.amount(),
                 request.currency()
+        ));
+        return response;
+    }
+
+    @PutMapping("/updateStatus")
+    public CompletableFuture<String> updateStatus(@RequestBody UpdateAccountStatusRequestDTO request){
+        CompletableFuture<String> response = commandGateway.send(new UpdateAccountStatusCommand(
+                request.accountId(),
+                request.status()
         ));
         return response;
     }
