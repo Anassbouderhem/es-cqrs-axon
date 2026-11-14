@@ -1,11 +1,13 @@
 package net.bouderhem.anass.escqrsaxon.query.controllers;
 
-import lombok.Getter;
+import net.bouderhem.anass.escqrsaxon.query.dtos.AccountStatementResponseDTO;
 import net.bouderhem.anass.escqrsaxon.query.entities.Account;
+import net.bouderhem.anass.escqrsaxon.query.queries.GetAccountStatementQuery;
 import net.bouderhem.anass.escqrsaxon.query.queries.GetAllAccountsQuery;
 import org.axonframework.messaging.responsetypes.ResponseTypes;
 import org.axonframework.queryhandling.QueryGateway;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,5 +28,11 @@ public class AccountQueryController {
                 new GetAllAccountsQuery(),
                 ResponseTypes.multipleInstancesOf(Account.class));
         return response;
+    }
+
+    @GetMapping("/accountStatement/{accountId}")
+    public CompletableFuture<AccountStatementResponseDTO> getAccountStatement(@PathVariable String accountId){
+        return queryGateway.query(new GetAccountStatementQuery(accountId),
+                ResponseTypes.instanceOf(AccountStatementResponseDTO.class));
     }
 }
