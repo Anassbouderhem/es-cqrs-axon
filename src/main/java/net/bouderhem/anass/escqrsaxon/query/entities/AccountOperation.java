@@ -4,13 +4,13 @@ import jakarta.persistence.*;
 import lombok.*;
 import net.bouderhem.anass.escqrsaxon.enums.OperationType;
 
-import java.util.Date;
+import java.time.Instant;
 @Entity
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class AccountOperation {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Date date;
+    private Instant date;
     private double amount;
     @Enumerated(EnumType.STRING)
     private OperationType type;

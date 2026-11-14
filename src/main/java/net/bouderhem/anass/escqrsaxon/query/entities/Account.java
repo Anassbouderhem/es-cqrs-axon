@@ -7,7 +7,7 @@ import jakarta.persistence.Id;
 import lombok.*;
 import net.bouderhem.anass.escqrsaxon.enums.AccountStatus;
 
-import java.util.Date;
+import java.time.Instant;
 @Entity
 @Getter
 @Setter
@@ -21,7 +21,7 @@ public class Account {
     private double balance;
     @Enumerated(EnumType.STRING)
     private AccountStatus status;
-    private Date createdAt;
+    private Instant createdAt;
     private String currency;
 }
 
