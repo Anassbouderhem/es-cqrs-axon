@@ -1,7 +1,9 @@
 package net.bouderhem.anass.escqrsaxon.commands.controllers;
 
 import net.bouderhem.anass.escqrsaxon.commands.commands.AddAccountCommand;
+import net.bouderhem.anass.escqrsaxon.commands.commands.CreditAccountCommand;
 import net.bouderhem.anass.escqrsaxon.commands.dtos.AddNewAccountRequestDTO;
+import net.bouderhem.anass.escqrsaxon.commands.dtos.CreditAccountRequestDTO;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.eventsourcing.eventstore.EventStore;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +31,18 @@ public class AccountCommandController {
         ));
         return response;
     }
+
+    @PostMapping("/credit")
+    public CompletableFuture<String> creditAccount(@RequestBody CreditAccountRequestDTO request){
+        CompletableFuture<String> response = commandGateway.send(new CreditAccountCommand(
+                request.accountId(),
+                request.amount(),
+                request.currency()
+        ));
+        return response;
+    }
+
+
 
     @ExceptionHandler(Exception.class)
     public String exceptionHandler(Exception exception){
