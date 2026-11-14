@@ -3,10 +3,7 @@ package net.bouderhem.anass.escqrsaxon.commands.controllers;
 import net.bouderhem.anass.escqrsaxon.commands.commands.AddAccountCommand;
 import net.bouderhem.anass.escqrsaxon.commands.dtos.AddNewAccountRequestDTO;
 import org.axonframework.commandhandling.gateway.CommandGateway;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -28,5 +25,10 @@ public class AccountCommandController {
                 request.currency()
         ));
         return response;
+    }
+
+    @ExceptionHandler(Exception.class)
+    public String exceptionHandler(Exception exception){
+        return exception.getMessage();
     }
 }
