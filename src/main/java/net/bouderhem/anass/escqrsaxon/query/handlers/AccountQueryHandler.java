@@ -5,6 +5,7 @@ import net.bouderhem.anass.escqrsaxon.query.entities.Account;
 import net.bouderhem.anass.escqrsaxon.query.entities.AccountOperation;
 import net.bouderhem.anass.escqrsaxon.query.queries.GetAccountStatementQuery;
 import net.bouderhem.anass.escqrsaxon.query.queries.GetAllAccountsQuery;
+import net.bouderhem.anass.escqrsaxon.query.queries.WatchEventQuery;
 import net.bouderhem.anass.escqrsaxon.query.repository.AccountRepository;
 import net.bouderhem.anass.escqrsaxon.query.repository.OperationRepository;
 import org.axonframework.queryhandling.QueryHandler;
@@ -33,5 +34,9 @@ public class AccountQueryHandler {
         return new AccountStatementResponseDTO(account,operations);
     }
 
+    @QueryHandler
+    public AccountOperation on (WatchEventQuery query){
+        return AccountOperation.builder().build();
+    }
 
 }
